@@ -35,15 +35,28 @@
     <footer>© 2025 Sistema de Ponto</footer>
 
     <script>
-        const api = '/api';
-        const usuarioId = sessionStorage.getItem('usuarioId') || 2;
+        const api = 'http://localhost:8080/api/ponto';
+        const usuarioId = Number(sessionStorage.getItem('usuarioId')) || 2;
 
         async function registrar(tipo) {
             const payload = { usuarioId, tipo };
-            const res = await fetch(api + '/ponto', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+            console.log("Tentando registrar:", payload);
+
+            const res = await fetch(api, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
             if (res.ok) loadToday();
-            else alert('Erro ao registrar');
+            else {
+                const text = await res.text();
+                console.error("Erro ao registrar ponto:", text);
+                alert('Erro ao registrar');
+            }
         }
+
+
 
         async function loadToday() {
             const today = new Date().toISOString().split('T')[0];

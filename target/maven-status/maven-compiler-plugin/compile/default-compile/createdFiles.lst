@@ -9,5 +9,6 @@ com\sistemaponto\model\Usuario.class
 com\sistemaponto\handler\EspelhoHandler.class
 com\sistemaponto\MainServer.class
 com\sistemaponto\handler\PontoHandler.class
+com\sistemaponto\handler\PontoHandler$1.class
 com\sistemaponto\handler\JornadaHandler.class
 com\sistemaponto\handler\UsuarioHandler.class
