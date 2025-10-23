@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <title>Espelho de Ponto</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Espelho de Ponto</h1>
+        <button onclick="logout()">Sair</button>
+    </header>
+    <main>
+        <div class="card">
+            <h2>Consulta</h2>
+            <input id="from" type="date">
+            <input id="to" type="date">
+            <button class="primary" onclick="consultar()">Consultar</button>
+        </div>
+        <div class="card">
+            <h2>Registros</h2>
+            <div id="resultado"></div>
+        </div>
+    </main>
+    <footer>© 2025 Sistema de Ponto</footer>
+    <script>
+        const usuarioId = sessionStorage.getItem('usuarioId') || 2;
+        async function consultar() {
+            const from = fromInput.value || new Date().toISOString().split('T')[0];
+            const to = toInput.value || from;
+            const r = await fetch(`/api/espelho?usuarioId=${usuarioId}&from=${from}&to=${to}`);
+            const j = await r.json();
+            const el = document.getElementById('resultado');
+            el.innerHTML = j.registros.length > 0
+                ? `<table><tr><th>Data/Hora</th><th>Tipo</th></tr>` + j.registros.map(x => `<tr><td>${new Date(x.timestamp).toLocaleString()}</td><td>${x.tipo}</td></tr>`).join('') + "</table>"
+                : "<em>Nenhum registro encontrado</em>";
+        }
+        function logout() { sessionStorage.clear(); location.href = '/login.html'; }
+        const fromInput = document.getElementById('from');
+        const toInput = document.getElementById('to');
+    </script>
+</body>
+
+</html>

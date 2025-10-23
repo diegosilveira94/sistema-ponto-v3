@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <title>Controle de Ponto</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Controle de Ponto</h1>
+        <button onclick="logout()">Sair</button>
+    </header>
+    <main>
+        <div class="card">
+            <h2>Registrar Ponto</h2>
+            <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+                <button class="primary" onclick="registrar('entrada')">Entrada</button>
+                <button class="accent" onclick="registrar('almoco_inicio')">Início Almoço</button>
+                <button class="accent" onclick="registrar('almoco_fim')">Fim Almoço</button>
+                <button class="primary" onclick="registrar('saida')">Saída</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Registros do Dia</h2>
+            <div id="timeline"></div>
+        </div>
+
+        <div class="card">
+            <a href="/espelho.html">Ver Espelho de Ponto</a>
+        </div>
+    </main>
+    <footer>© 2025 Sistema de Ponto</footer>
+
+    <script>
+        const api = '/api';
+        const usuarioId = sessionStorage.getItem('usuarioId') || 2;
+
+        async function registrar(tipo) {
+            const payload = { usuarioId, tipo };
+            const res = await fetch(api + '/ponto', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+            if (res.ok) loadToday();
+            else alert('Erro ao registrar');
+        }
+
+        async function loadToday() {
+            const today = new Date().toISOString().split('T')[0];
+            const res = await fetch(`${api}/ponto?usuarioId=${usuarioId}&date=${today}`);
+            const data = await res.json();
+            const el = document.getElementById('timeline');
+            el.innerHTML = data.map(r => `<div>${new Date(r.timestamp).toLocaleTimeString()} - ${r.tipo}</div>`).join('') || "<em>Sem registros</em>";
+        }
+        function logout() { sessionStorage.clear(); location.href = '/login.html'; }
+        loadToday();
+    </script>
+</body>
+
+</html>

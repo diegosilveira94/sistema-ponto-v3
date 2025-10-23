@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <title>Cadastrar Usuário</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Cadastro de Usuário</h1>
+        <button onclick="logout()">Sair</button>
+    </header>
+    <main>
+        <div class="card">
+            <h2>Novo Usuário</h2>
+            <input id="nome" placeholder="Nome completo">
+            <input id="email" placeholder="E-mail">
+            <input id="cpf" placeholder="CPF">
+            <select id="papel">
+                <option value="COLABORADOR">Colaborador</option>
+                <option value="GESTOR">Gestor</option>
+            </select>
+            <input id="senha" placeholder="Senha">
+            <button class="primary" onclick="cadastrar()">Cadastrar</button>
+        </div>
+    </main>
+    <footer>© 2025 Sistema de Ponto</footer>
+    <script>
+        async function cadastrar() {
+            const u = { nome: nome.value, email: email.value, cpf: cpf.value, papel: papel.value, senha: senha.value };
+            const res = await fetch('/api/usuario', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(u) });
+            const j = await res.json();
+            if (res.ok) { alert("Usuário criado!"); location.href = "/gestor.html"; }
+            else alert(j.msg || "Erro");
+        }
+        function logout() { sessionStorage.clear(); location.href = '/login.html'; }
+    </script>
+</body>
+
+</html>

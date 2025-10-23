@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <title>Painel do Gestor</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <header>
+        <h1>Painel do Gestor</h1>
+        <button onclick="logout()">Sair</button>
+    </header>
+    <main>
+        <div class="card">
+            <h2>Usuários</h2>
+            <button class="primary" onclick="location.href='/cadastro.html'">+ Novo Usuário</button>
+            <div id="usuarios"></div>
+        </div>
+
+        <div class="card">
+            <h2>Jornadas</h2>
+            <input id="jnome" placeholder="Nome da jornada">
+            <input id="jhoras" type="number" placeholder="Horas diárias" value="8">
+            <button class="accent" onclick="criarJornada()">Criar</button>
+            <div id="jornadas"></div>
+        </div>
+    </main>
+    <footer>© 2025 Sistema de Ponto</footer>
+
+    <script>
+        async function loadUsuarios() {
+            const r = await fetch('/api/usuario');
+            const j = await r.json();
+            const el = document.getElementById('usuarios');
+            el.innerHTML = `<table><tr><th>ID</th><th>Nome</th><th>Papel</th></tr>` + j.map(u => `<tr><td>${u.id}</td><td>${u.nome}</td><td>${u.papel}</td></tr>`).join('') + "</table>";
+        }
+        async function loadJornadas() {
+            const r = await fetch('/api/jornada');
+            const j = await r.json();
+            const el = document.getElementById('jornadas');
+            el.innerHTML = `<table><tr><th>ID</th><th>Nome</th><th>Horas</th></tr>` + j.map(x => `<tr><td>${x.id}</td><td>${x.nome}</td><td>${x.horasDiarias}</td></tr>`).join('') + "</table>";
+        }
+        async function criarJornada() {
+            const payload = { nome: jnome.value, horasDiarias: parseInt(jhoras.value || '8') };
+            const r = await fetch('/api/jornada', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+            if (r.ok) loadJornadas();
+        }
+        function logout() { sessionStorage.clear(); location.href = '/login.html'; }
+        loadUsuarios();
+        loadJornadas();
+    </script>
+</body>
+
+</html>

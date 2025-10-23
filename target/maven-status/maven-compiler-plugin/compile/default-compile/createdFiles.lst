@@ -1,0 +1,13 @@
+com\sistemaponto\controller\PontoHandler.class
+com\sistemaponto\model\Jornada.class
+com\sistemaponto\model\RegistroPonto.class
+com\sistemaponto\service\PontoService.class
+com\sistemaponto\handler\AuthHandler.class
+com\sistemaponto\handler\Utils.class
+com\sistemaponto\handler\StaticFileHandler.class
+com\sistemaponto\model\Usuario.class
+com\sistemaponto\handler\EspelhoHandler.class
+com\sistemaponto\MainServer.class
+com\sistemaponto\handler\PontoHandler.class
+com\sistemaponto\handler\JornadaHandler.class
+com\sistemaponto\handler\UsuarioHandler.class

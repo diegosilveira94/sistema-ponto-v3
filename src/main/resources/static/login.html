@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8">
+    <title>Login - Sistema de Ponto</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <main>
+        <div class="card">
+            <h2>Login</h2>
+            <input id="email" placeholder="E-mail">
+            <input id="senha" type="password" placeholder="Senha">
+            <button class="primary" onclick="login()">Entrar</button>
+            <p style="color: var(--muted); margin-top:1rem;">Gestor: gestor@exemplo.com / 123<br>Colaborador:
+                colab@exemplo.com / 123</p>
+        </div>
+    </main>
+    <footer>© 2025 Sistema de Ponto</footer>
+    <script>
+        async function login() {
+            const email = emailInput.value;
+            const senha = senhaInput.value;
+            const res = await fetch('/api/auth', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, senha }) });
+            const j = await res.json();
+            if (res.ok && j.ok) {
+                const papel = j.usuario.papel;
+                sessionStorage.setItem("usuarioId", j.usuario.id);
+                if (papel === "GESTOR") location.href = "/gestor.html";
+                else location.href = "/index.html";
+            } else alert(j.msg || "Credenciais inválidas");
+        }
+        const emailInput = document.getElementById('email');
+        const senhaInput = document.getElementById('senha');
+    </script>
+</body>
+
+</html>
